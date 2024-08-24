@@ -1,0 +1,6 @@
+Pillow
+scikit_image
+matplotlib
+opencv-python
+PyQt5
+seaborn
