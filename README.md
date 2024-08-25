@@ -23,7 +23,8 @@ cd synthetic-image-generator
 pip install -r requirements.txt
 ```
 
-🛠️ Usage
+## 🛠️ Usage
+
 To generate synthetic images, execute the app.py file:
 
 <p align="center">
@@ -33,42 +34,24 @@ To generate synthetic images, execute the app.py file:
 </p>
 
 
-🔧 Input Parameters
-output_path: Directory to save the generated images.
-width: Width of the image in pixels.
-height: Height of the image in pixels.
-num_cells: Number of yeast cells to simulate.
-fluorescence_level: Intensity of the fluorescence signal.
-cell_size: Tuple specifying minimum and maximum cell sizes.
-cell_shape: Shape of the cells (e.g., 'circular', 'elliptical').
-noise_level: Amount of noise to add to the image for realism.
-📤 Output Files
-Fluorescence Image: A .tif file of the generated yeast cells.
+## 🔧 Input Parameters
+
+- Image width: Width of the image in pixels.
+- Image height: Height of the image in pixels.
+- Num of cells: Number of cells to simulate.
+- Min & Max fluorescence_level: Intensity of the fluorescence signal.
+- Cell size: Specifying minimum and maximum cell sizes.
+- Camera noise level: Amount of noise to add to the image for realism.
+  
+## 📤 Output Files
+
+Fluorescence Image: A .png file of the generated yeast cells.
 Labeled Image: A .png file with labeled cells, where the background is 0 and cells are labeled with incrementing integers.
-📚 Examples
-Generate a 2048x2048 pixel image with 50 yeast cells:
 
-python
-Copy code
-generate_synthetic_images(
-    output_path='output',
-    width=2048,
-    height=2048,
-    num_cells=50,
-    fluorescence_level=0.8,
-    cell_size=(5, 20),
-    cell_shape='circular',
-    noise_level=0.05
-)
-🤝 Contributing
+## 📚 Examples
+
+Generate a 128x128 pixel image with 9 cells:
+    
+## 🤝 Contributing
 We welcome contributions! Please fork the repository, create a new branch, and submit a pull request. Ensure your code is well-documented and adheres to the project's coding standards.
-
-📄 License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-📧 Contact
-For questions or feedback, please contact Harry Liu at zhuohel@bcm.edu, and cc Xiaoyu Lu (xiaoyu.lu@rice.edu) and Beatriz Campillo (beatriz.campillominano@bcm.edu).
-
-📖 References
-St-Pierre Lab Programming Test Document: This project was developed as part of the St-Pierre Lab's programming test, aimed at generating synthetic datasets for cell segmentation.
 <p align="center"> <img src="https://img.shields.io/github/forks/vinaykadam007/synthetic-image-generator?style=social" alt="Forks"> <img src="https://img.shields.io/github/stars/vinaykadam007/synthetic-image-generator?style=social" alt="Stars"> </p> ```
