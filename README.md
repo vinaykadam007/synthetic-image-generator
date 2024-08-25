@@ -53,11 +53,10 @@ Labeled Image: A .png file with labeled cells, where the background is 0 and cel
 Generate a 128x128 pixel image with 9 cells:
 
 <p align="center">
-  <img src="misc/ScreenshotGUI.png" alt="Synthetic Image Example" width="400"/>
-  <img src="misc/ScreenshotGUI.png" alt="Synthetic Image Example" width="400"/>
+  <img src="misc/Fluorescence.png" alt="Synthetic Image Example" width="400"/>
+  <img src="misc/Label.png" alt="Synthetic Image Example" width="400"/>
   <br>
-  <em>Generated Fluorescence Image</em>
-  <em>Generated Label Image</em>
+  <em>Generated Fluorescence and Label Image</em>
 </p>
 
     
