@@ -1,6 +1,6 @@
-Pillow
-scikit_image
-matplotlib
-opencv-python
-PyQt5
-seaborn
+pillow==10.4.0
+scikit_image==0.24.0
+matplotlib==3.9.2
+opencv-python==4.10.0.84
+PyQt5==5.15.11
+seaborn==0.13.2
