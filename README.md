@@ -1,5 +1,5 @@
 # Synthetic Image Generator
-Synthetic Image Generator is a Python tool for creating synthetic fluorescence microscopy images of cells, along with their labeled counterparts. This generator is ideal for creating datasets for training machine learning models in segmentation tasks.
+Synthetic Image Generator is a tool for creating synthetic fluorescence microscopy images of cells, along with their labeled counterparts. This generator is ideal for creating datasets for training machine learning models in segmentation tasks.
 
 <p align="center">
   <img src="misc/demodisplay_image.png" alt="Synthetic Image Example" width="400"/>
