@@ -61,5 +61,5 @@ Generate a 128x128 pixel image with 9 cells:
 
     
 ## 🤝 Contributing
-We welcome contributions! Please fork the repository, create a new branch, and submit a pull request. Ensure your code is well-documented and adheres to the project's coding standards.
+Welcome all contributions! Please fork the repository, create a new branch, and submit a pull request. Ensure your code is well-documented and adheres to the project's coding standards.
 <p align="center"> <img src="https://img.shields.io/github/forks/vinaykadam007/synthetic-image-generator?style=social" alt="Forks"> <img src="https://img.shields.io/github/stars/vinaykadam007/synthetic-image-generator?style=social" alt="Stars"> </p>
