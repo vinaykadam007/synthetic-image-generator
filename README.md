@@ -28,7 +28,7 @@ pip install -r requirements.txt
 To generate synthetic images, execute the app.py file:
 
 <p align="center">
-  <img src="misc/ScreenshotGUI.png" alt="Synthetic Image Example" width="400"/>
+  <img src="misc/Screenshot.png" alt="Synthetic Image Example" width="400"/>
   <br>
   <em>Simple Graphical User Interface</em>
 </p>
