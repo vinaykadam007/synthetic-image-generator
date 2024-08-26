@@ -12,21 +12,21 @@ from skimage.filters import threshold_otsu
 import matplotlib.pyplot as plt
 import shutil
 
-
+# Function to get the absolute path to resource files
 def resource_path(relative_path):
     if hasattr(sys, '_MEIPASS'):
         return os.path.join(sys._MEIPASS, relative_path)
     return os.path.join(os.path.abspath("."), relative_path)
 
-
+# Main application class for the Image Generator
 class ImageGeneratorApp(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.initUI()
+        self.initUI()  # Initialize the user interface
 
     def initUI(self):
-        self.setWindowIcon(QIcon('icons/python.png'))
-        self.setWindowTitle('Synthetic Image Generator')
+        self.setWindowIcon(QIcon('icons/python.png'))  # Set the window icon
+        self.setWindowTitle('Synthetic Image Generator')  # Set the window title
         self.setFixedSize(500, 600)  # Fixed window size
 
         # Center the window on the screen
@@ -39,9 +39,9 @@ class ImageGeneratorApp(QMainWindow):
         self.central_widget = QWidget(self)
         self.setCentralWidget(self.central_widget)
 
-        self.layout = QGridLayout(self.central_widget)
+        self.layout = QGridLayout(self.central_widget)  # Grid layout for the widgets
 
-        # Parameters
+        # Parameter controls for the synthetic image generator
         self.width_label = QLabel("Image Width:")
         self.width_slider = QSpinBox()
         self.width_slider.setRange(0, 2048)
@@ -90,6 +90,7 @@ class ImageGeneratorApp(QMainWindow):
         self.noise_slider.setSingleStep(0.01)
         self.noise_slider.setValue(0.01)
 
+        # Button to trigger image generation
         self.generate_button = QPushButton("Generate Image")
         self.generate_button.setStyleSheet("min-height: 50px; background-color: green; color: white; font-size: 20px;")
         self.generate_button.clicked.connect(self.generate_image)
@@ -117,15 +118,15 @@ class ImageGeneratorApp(QMainWindow):
         self.layout.addWidget(self.fl_max_slider, 7, 1)
         self.layout.addWidget(self.noise_label, 8, 0)
         self.layout.addWidget(self.noise_slider, 8, 1)
-        # self.layout.addWidget(self.generate_button, 9, 0, 1, 2)
-        self.layout.addWidget(self.generate_button, 10, 0, 1, 2)
+        self.layout.addWidget(self.generate_button, 10, 0, 1, 2)  # Adjusted for consistency
         # Layout for image displays (occupying the remaining columns)
         self.layout.addWidget(self.image_label, 9, 0)
         self.layout.addWidget(self.segmented_label, 9, 1)
 
+    # Function to generate synthetic images based on user input
     def generate_image(self):
-        shutil.rmtree(resource_path('generated_images/images'))
-        shutil.rmtree(resource_path('generated_images/labels'))
+        shutil.rmtree(resource_path('generated_images/images'))  # Clear previous images
+        shutil.rmtree(resource_path('generated_images/labels'))  # Clear previous labels
         width = self.width_slider.value()
         height = self.height_slider.value()
         num_images = self.num_images_slider.value()
@@ -145,17 +146,19 @@ class ImageGeneratorApp(QMainWindow):
         self.display_image(fluorescence_image_path, self.image_label)
         self.display_image(labeled_image_path, self.segmented_label)
 
+    # Function to display images in the GUI
     def display_image(self, image_path, label):
         image = QImage(image_path)
         pixmap = QPixmap.fromImage(image)
         label.setPixmap(pixmap.scaled(label.size(), Qt.KeepAspectRatio))
 
+# Function to generate a synthetic fluorescence image
 def generate_fluorescence_image(width=128, height=128, num_cells=9, 
                                 fluorescence_level=(0.4, 0.6), 
                                 cell_size_range=(5, 16), 
                                 camera_noise=0.01):
-    image = np.zeros((height, width), dtype=np.float32)
-    shapes = ['irregular_round', 'ellipse', 'round']
+    image = np.zeros((height, width), dtype=np.float32)  # Create a blank image
+    shapes = ['irregular_round', 'ellipse', 'round']  # Possible shapes for cells
     
     for _ in range(num_cells):
         center_y = np.random.randint(0, height)
@@ -173,83 +176,78 @@ def generate_fluorescence_image(width=128, height=128, num_cells=9,
         elif cell_shape == 'ellipse':
             rr, cc = draw.ellipse(center_y, center_x, base_radius, np.random.randint(base_radius // 2, base_radius), shape=image.shape)
         
-        fluorescence = np.random.uniform(fluorescence_level[0], fluorescence_level[1])
-        image[rr, cc] += fluorescence
+        fluorescence = np.random.uniform(fluorescence_level[0], fluorescence_level[1])  # Random fluorescence level
+        image[rr, cc] += fluorescence  # Add fluorescence to the image
     
-    image = gaussian_filter(image, 1)
-    image += np.random.normal(scale=camera_noise, size=image.shape)
-    image = np.clip(image, 0, 1)
+    image = gaussian_filter(image, 1)  # Apply Gaussian blur
+    image += np.random.normal(scale=camera_noise, size=image.shape)  # Add camera noise
+    image = np.clip(image, 0, 1)  # Ensure pixel values are between 0 and 1
     return image
 
+# Function to apply watershed segmentation to the generated fluorescence image
 def apply_watershed_segmentation(image):
-    fluorescence_image_8bit = (image * 255).astype(np.uint8)
-    threshold_value = threshold_otsu(fluorescence_image_8bit)
-    binary_image = (fluorescence_image_8bit > threshold_value) * 255
+    fluorescence_image_8bit = (image * 255).astype(np.uint8)  # Convert the image to 8-bit format
+    threshold_value = threshold_otsu(fluorescence_image_8bit)  # Determine the Otsu threshold
+    binary_image = (fluorescence_image_8bit > threshold_value) * 255  # Create a binary image
 
-    kernel = np.ones((2, 2), np.uint8)
-    binary_image = binary_image.astype('uint8')
-    sure_bg = cv2.dilate(binary_image, kernel, iterations=10)
-    dist_transform = cv2.distanceTransform(binary_image, cv2.DIST_L2, 0)
-    ret, sure_fg = cv2.threshold(dist_transform, 0.10 * dist_transform.max(), 255, 0)
-    sure_fg = np.uint8(sure_fg)
-    unknown = cv2.subtract(sure_bg, sure_fg)
+    kernel = np.ones((2, 2), np.uint8)  # Define a kernel for morphological operations
+    binary_image = binary_image.astype('uint8')  # Ensure binary image is in uint8 format
+    sure_bg = cv2.dilate(binary_image, kernel, iterations=10)  # Dilate to find sure background
+    dist_transform = cv2.distanceTransform(binary_image, cv2.DIST_L2, 0)  # Distance transform
+    ret, sure_fg = cv2.threshold(dist_transform, 0.10 * dist_transform.max(), 255, 0)  # Threshold for sure foreground
+    sure_fg = np.uint8(sure_fg)  # Convert sure foreground to uint8 format
+    unknown = cv2.subtract(sure_bg, sure_fg)  # Subtract sure foreground from background
 
     # Marker labeling
-    ret, markers = cv2.connectedComponents(sure_fg)
-    markers = markers + 1
-    markers[unknown == 255] = 0
-    # markers[markers == 1] = 0
+    ret, markers = cv2.connectedComponents(sure_fg)  # Label connected components
+    markers = markers + 1  # Increment all labels by 1 to ensure background is 1
+    markers[unknown == 255] = 0  # Mark the unknown region with 0
+
     # Apply the watershed algorithm
     markers = cv2.watershed(cv2.cvtColor(fluorescence_image_8bit, cv2.COLOR_GRAY2BGR), markers)
-    # markers[markers == 1] = 0
-    # Mark the boundaries in the original image (optional)
-    # fluorescence_image_8bit[markers == 1] = 0
-    markers[markers == -1] = 0
-
-    # Optionally adjust other segments if needed; the rest of the segments are naturally labeled incrementally
-    markers -= 1 
-
-
+    markers[markers == -1] = 0  # Mark the boundaries in the original image as 0
 
     return markers
 
+# Function to generate a batch of synthetic images and save them
 def generate_batch_images(num_images, output_dir, width=128, height=128, num_cells=9, 
                           fluorescence_level=(0.4, 0.6), cell_size_range=(5, 16), camera_noise=0.01):
-    images_dir = os.path.join(output_dir, 'images')
-    labels_dir = os.path.join(output_dir, 'labels')
-    os.makedirs(images_dir, exist_ok=True)
-    os.makedirs(labels_dir, exist_ok=True)
+    images_dir = os.path.join(output_dir, 'images')  # Directory to save images
+    labels_dir = os.path.join(output_dir, 'labels')  # Directory to save labels
+    os.makedirs(images_dir, exist_ok=True)  # Create directory if it doesn't exist
+    os.makedirs(labels_dir, exist_ok=True)  # Create directory if it doesn't exist
     
     for i in range(1, num_images + 1):
         fluorescence_image = generate_fluorescence_image(width, height, num_cells, fluorescence_level, cell_size_range, camera_noise)
         output_image = apply_watershed_segmentation(fluorescence_image)
-        if i == 1:
-            fluorescence_filename = os.path.join(images_dir, f"fluorescence_image_{i:03d}.png")
-            label_filename = os.path.join(labels_dir, f"labeled_image_{i:03d}.png")
-            cv2.imwrite(fluorescence_filename, (fluorescence_image * 255).astype(np.uint8))
-            cv2.imwrite(label_filename, output_image)
+        
+        fluorescence_filename = os.path.join(images_dir, f"fluorescence_image_{i:03d}.png")  # Filepath for fluorescence image
+        label_filename = os.path.join(labels_dir, f"labeled_image_{i:03d}.png")  # Filepath for label image
+        
+        # Save the fluorescence and label images
+        cv2.imwrite(fluorescence_filename, (fluorescence_image * 255).astype(np.uint8))
+        cv2.imwrite(label_filename, output_image)
 
+        # Save demo display images for the GUI
+        if i == 1:
             display_dir = os.path.join(output_dir, 'demo')
+            os.makedirs(display_dir, exist_ok=True)  # Create directory for demo images
+            
             plt.figure()
             plt.imshow(output_image)
             plt.axis('off')
-            plt.savefig(display_dir + 'display_label.png', bbox_inches='tight', pad_inches=0)
+            plt.savefig(os.path.join(display_dir, 'display_label.png'), bbox_inches='tight', pad_inches=0)
 
             plt.figure()
-            plt.imshow(fluorescence_image, cmap = 'gray')
+            plt.imshow(fluorescence_image, cmap='gray')
             plt.axis('off')
-            plt.savefig(display_dir + 'display_image.png', bbox_inches='tight', pad_inches=0)
-        else:
-            fluorescence_filename = os.path.join(images_dir, f"fluorescence_image_{i:03d}.png")
-            label_filename = os.path.join(labels_dir, f"labeled_image_{i:03d}.png")
+            plt.savefig(os.path.join(display_dir, 'display_image.png'), bbox_inches='tight', pad_inches=0)
 
-            cv2.imwrite(fluorescence_filename, (fluorescence_image * 255).astype(np.uint8))
-            cv2.imwrite(label_filename, output_image)
-
+# Main entry point for the application
 if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    app.setStyle("Fusion")
-    ex = ImageGeneratorApp()
-    ex.show()
-    sys.exit(app.exec_())
+    app = QApplication(sys.argv)  # Create the application
+    app.setStyle("Fusion")  # Set application style
+    ex = ImageGeneratorApp()  # Create an instance of the application window
+    ex.show()  # Show the application window
+    sys.exit(app.exec_())  # Start the application's event loop
 
