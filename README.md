@@ -48,7 +48,7 @@ To generate synthetic images, execute the app.py file:
 Fluorescence Image: A .png file of the generated yeast cells.
 Labeled Image: A .png file with labeled cells, where the background is 0 and cells are labeled with incrementing integers.
 
-## 📚 Examples
+## Examples
 
 Generate a 128x128 pixel image with 9 cells:
 
@@ -60,6 +60,6 @@ Generate a 128x128 pixel image with 9 cells:
 </p>
 
     
-## 🤝 Contributing
-Welcome all contributions! Please fork the repository, create a new branch, and submit a pull request. Ensure your code is well-documented and adheres to the project's coding standards.
-<p align="center"> <img src="https://img.shields.io/github/forks/vinaykadam007/synthetic-image-generator?style=social" alt="Forks"> <img src="https://img.shields.io/github/stars/vinaykadam007/synthetic-image-generator?style=social" alt="Stars"> </p>
+## 📚 References
+1. Unet and watershed algorithm - Python for Microscopists Github Repo (https://github.com/bnsreenu/python_for_microscopists)
+2. PyQt Documentation (https://doc.qt.io/qtforpython-6/)
