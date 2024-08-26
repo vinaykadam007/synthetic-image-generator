@@ -20,6 +20,7 @@ Clone the repository and install dependencies:
 ```bash
 git clone https://github.com/vinaykadam007/synthetic-image-generator.git
 cd synthetic-image-generator
+conda create -n "env" python=3.11
 pip install -r requirements.txt
 python app.py
 ```
