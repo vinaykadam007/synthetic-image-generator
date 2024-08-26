@@ -21,6 +21,7 @@ Clone the repository and install dependencies:
 git clone https://github.com/vinaykadam007/synthetic-image-generator.git
 cd synthetic-image-generator
 pip install -r requirements.txt
+python app.py
 ```
 
 ## 🛠️ Usage
