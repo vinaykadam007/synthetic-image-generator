@@ -25,7 +25,7 @@ class ImageGeneratorApp(QMainWindow):
         self.initUI()  # Initialize the user interface
 
     def initUI(self):
-        self.setWindowIcon(QIcon('icons/python.png'))  # Set the window icon
+        self.setWindowIcon(QIcon(resource_path('icons/python.png')))  # Set the window icon
         self.setWindowTitle('Synthetic Image Generator')  # Set the window title
         self.setFixedSize(500, 600)  # Fixed window size
 
@@ -140,8 +140,8 @@ class ImageGeneratorApp(QMainWindow):
                               fluorescence_level, cell_size_range, camera_noise)
 
         # Display the first generated image and labeled image
-        fluorescence_image_path = os.path.join(output_dir, 'demodisplay_image.png')
-        labeled_image_path = os.path.join(output_dir, 'demodisplay_label.png')
+        fluorescence_image_path = os.path.join(output_dir, 'demo/display_image.png')
+        labeled_image_path = os.path.join(output_dir, 'demo/display_label.png')
         
         self.display_image(fluorescence_image_path, self.image_label)
         self.display_image(labeled_image_path, self.segmented_label)
